@@ -7,5 +7,5 @@ class IndexView(View):
         if request.user.is_superuser:
             return redirect('/admin/')
         if request.user.is_authenticated:
-            return render('index.html')
+            return render(request, 'blog_app/index.html')
         return redirect('login_url')

@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h3 class='mb-5'>News line</h3>
+{% for post in posts %}
+    <p>
+        {{ post.title }}
+    </p>
+{% endfor %}
+{% endblock %}
