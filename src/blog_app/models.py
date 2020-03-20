@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
+from django.template.loader import render_to_string
 
 
 class Blog(models.Model):
@@ -24,3 +25,12 @@ class Post(models.Model):
 
     def __str__(self):
         return f'{self.title}'
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        for user in self.blog.subscribers.all():
+            user.email_user(
+                f'New post in {self.blog}', None,
+                html_message=f'<a href="http://localhost:8000/post/{self.id}/">{self}</a>'
+            )
+ 
