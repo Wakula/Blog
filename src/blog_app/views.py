@@ -3,7 +3,7 @@ from django.views.generic import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ObjectDoesNotExist
 from blog_app.models import Blog, Post
-from blog_app.forms import BlogForm
+from blog_app.forms import BlogForm, PostForm
 
 
 class IndexView(View):
@@ -38,8 +38,10 @@ class UserBlogView(LoginRequiredMixin, View):
             bound_form = BlogForm(request.user, request.POST)
             if bound_form.is_valid():
                 blog = bound_form.save()
+                return render(request, 'blog_app/successfully_crated_blog.html')
             return render(request, 'blog_app/blog_create.html', context={'form': bound_form})
         return render(request, 'blog_app/blog_already_exists.html')
+
 
 class BlogListView(LoginRequiredMixin, View):
     login_url = '/login/'
@@ -49,15 +51,20 @@ class BlogListView(LoginRequiredMixin, View):
         pass
 
 
-class SinglePostView(LoginRequiredMixin, View):
+class PostCreationView(LoginRequiredMixin, View):
     login_url = '/login/'
     redirect_field_name = 'redirect_to'
 
     def get(self, request):
-        pass
+        form = PostForm(request.user.blog)
+        return render(request, 'blog_app/post_create.html', context={'form': form})
 
     def post(self, request):
-        pass
+            bound_form = PostForm(request.user.blog, request.POST)
+            if bound_form.is_valid():
+                post = bound_form.save()
+                return render(request, 'blog_app/successfully_created_post.html')
+            return render(request, 'blog_app/post_create.html', context={'form': bound_form})
 
 
 class PostListView(LoginRequiredMixin, View):
