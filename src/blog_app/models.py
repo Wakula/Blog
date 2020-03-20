@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
-from django.template.loader import render_to_string
+from blog_app.tasks import email_task
 
 
 class Blog(models.Model):
@@ -29,8 +29,4 @@ class Post(models.Model):
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         for user in self.blog.subscribers.all():
-            user.email_user(
-                f'New post in {self.blog}', None,
-                html_message=f'<a href="http://localhost:8000/post/{self.id}/">{self}</a>'
-            )
- 
+            email_task.delay(self.title, self.blog.name, self.id, user.email)
