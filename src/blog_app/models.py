@@ -8,6 +8,9 @@ class Blog(models.Model):
     author = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
     subscribers = models.ManyToManyField(get_user_model(), blank=True, related_name='subscribed_blogs')
 
+    def user_is_subscribed(self, user):
+        return user in self.subscribers.all()
+
     def __str__(self):
         return f'{self.name}'
 

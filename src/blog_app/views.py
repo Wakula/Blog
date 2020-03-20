@@ -38,7 +38,7 @@ class UserBlogView(LoginRequiredMixin, View):
             bound_form = BlogForm(request.user, request.POST)
             if bound_form.is_valid():
                 blog = bound_form.save()
-                return render(request, 'blog_app/successfully_crated_blog.html')
+                return render(request, 'blog_app/successfully_created_blog.html')
             return render(request, 'blog_app/blog_create.html', context={'form': bound_form})
         return render(request, 'blog_app/blog_already_exists.html')
 
@@ -48,7 +48,19 @@ class BlogListView(LoginRequiredMixin, View):
     redirect_field_name = 'reidrect_to'
 
     def get(self, request):
-        pass
+        blogs = Blog.objects.exclude(author=request.user)
+        for blog in blogs:
+            blog.is_subscribed = blog in request.user.subscribed_blogs.all()
+        return render(request, 'blog_app/all_blogs.html', context={'blogs': blogs})
+
+    def post(self, request, blog_id):
+        blog = Blog.objects.get(id=blog_id)
+        if blog.user_is_subscribed(request.user):
+            blog.subscribers.remove(request.user)
+        else:
+            blog.subscribers.add(request.user)
+        return redirect('all_blogs_url')
+        
 
 
 class PostCreationView(LoginRequiredMixin, View):
