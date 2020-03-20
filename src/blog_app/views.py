@@ -75,7 +75,7 @@ class PostCreationView(LoginRequiredMixin, View):
             bound_form = PostForm(request.user.blog, request.POST)
             if bound_form.is_valid():
                 post = bound_form.save()
-                return render(request, 'blog_app/successfully_created_post.html')
+                return render(request, 'blog_app/blog_page.html')
             return render(request, 'blog_app/post_create.html', context={'form': bound_form})
 
 
