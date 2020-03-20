@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block content %}
+    {% for blog in blogs %}
+    <div class="card">
+        <div class="card-header">
+            Author - {{blog.author.username}}
+        </div>
+        <div class="card-body">
+          <h5 class="card-title">{{blog.name}}</h5>
+          <p class="card-text">{{blog.description}}</p>
+          <form action="{% url 'single_blog_url' blog_id=blog.id %}" method="POST">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary">
+                {% if blog.is_subscribed %}
+                    Unsubscribe
+                {% else %}
+                    Subscribe
+                {% endif %}
+            </button>
+          </form>
+        </div>
+      </div>
+    {% endfor %}
+{% endblock %}
