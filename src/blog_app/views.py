@@ -11,7 +11,14 @@ class IndexView(View):
         if request.user.is_superuser:
             return redirect('/admin/')
         if request.user.is_authenticated:
-            return render(request, 'blog_app/index.html')
+            subscribed_blogs = request.user.subscribed_blogs.all()
+            posts = []
+            for blog in subscribed_blogs:
+                posts += list(blog.post_set.all())
+            posts.sort(key = lambda blog: blog.date_pub, reverse=True)
+            for post in posts:
+                post.is_read = post in request.user.read_posts.all()
+            return render(request, 'blog_app/index.html', context={'posts': posts})
         return redirect('login_url')
 
 
@@ -30,7 +37,6 @@ class UserBlogView(LoginRequiredMixin, View):
         
         return render(request, 'blog_app/blog_page.html', context={'blog': blog, 'posts': posts})
 
-
     def post(self, request):
         try:
             request.user.blog
@@ -38,7 +44,7 @@ class UserBlogView(LoginRequiredMixin, View):
             bound_form = BlogForm(request.user, request.POST)
             if bound_form.is_valid():
                 blog = bound_form.save()
-                return render(request, 'blog_app/successfully_created_blog.html')
+                return redirect('blog_url')
             return render(request, 'blog_app/blog_create.html', context={'form': bound_form})
         return render(request, 'blog_app/blog_already_exists.html')
 
@@ -57,11 +63,15 @@ class BlogListView(LoginRequiredMixin, View):
         blog = Blog.objects.get(id=blog_id)
         if blog.user_is_subscribed(request.user):
             blog.subscribers.remove(request.user)
+            user_posts = set(request.user.read_posts.all())
+            blog_posts = set(blog.post_set.all())
+            read_posts = user_posts.intersection(blog_posts)
+            for post in read_posts:
+                post.users_that_have_read.remove(request.user)
         else:
             blog.subscribers.add(request.user)
         return redirect('all_blogs_url')
         
-
 
 class PostCreationView(LoginRequiredMixin, View):
     login_url = '/login/'
@@ -75,13 +85,20 @@ class PostCreationView(LoginRequiredMixin, View):
             bound_form = PostForm(request.user.blog, request.POST)
             if bound_form.is_valid():
                 post = bound_form.save()
-                return render(request, 'blog_app/blog_page.html')
+                return render(request, 'blog_app/successfully_created_post.html')
             return render(request, 'blog_app/post_create.html', context={'form': bound_form})
 
 
-class PostListView(LoginRequiredMixin, View):
+class SinglePostView(LoginRequiredMixin, View):
     login_url = '/login/'
     redirect_field_name = 'redirect_to'
 
-    def get(self, request):
-        pass
+    def get(self, request, post_id):
+        post = Post.objects.get(id=post_id)
+        return render(request, 'blog_app/read_post.html', context={'post': post})
+        
+    def post(self, request, post_id):
+        read_post = Post.objects.get(id=post_id)
+        read_post.users_that_have_read.add(request.user)
+
+        return redirect('home_url')
