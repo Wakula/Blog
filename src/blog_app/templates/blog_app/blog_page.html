@@ -2,5 +2,8 @@
 
 {% block content %}
     {{ blog }}
+    <form action="{% url 'post_url' %}">
+        <button class="btn btn-primary" type="submit">New Post</button>
+    </form>
     {{ posts }}
 {% endblock %}
