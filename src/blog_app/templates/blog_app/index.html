@@ -3,8 +3,24 @@
 {% block content %}
 <h3 class='mb-5'>News line</h3>
 {% for post in posts %}
-    <p>
-        {{ post.title }}
-    </p>
+<div class="card mb-4">
+    <div class="card-header">
+        {{post.date_pub}}
+        <h5 class="card-title">Author - {{post.blog.author}}</h5>
+    </div>
+    <div class="card-body">
+      <h5 class="card-title">{{post.title}}</h5>
+      <p class="card-text">{{post.content|truncatewords:15}}</p>
+      <a href="{% url 'single_post_url' post_id=post.id %}" class="btn btn-primary">Read</a>
+    </div>
+    {% if post.is_read %}
+        <h5 class="card-title"> You have read this post </h5>
+    {% else %}
+    <form action="{% url 'single_post_url' post_id=post.id %}" method="POST">
+        {% csrf_token %}  
+      <button type="submit" class="btn btn-secondary">Mark as read</button>
+    </form>
+    {% endif %}
+  </div>
 {% endfor %}
 {% endblock %}

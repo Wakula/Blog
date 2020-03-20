@@ -1,5 +1,5 @@
     <h1> Login Page </h1>
-    <form method='POST'>
+    <form method='POST' action="{% url 'login_url'%}{%if 'redirect_to' in request.GET %}?next={{request.GET.redirect_to}}{%endif%}">
         {% csrf_token %}
         {{ form.as_p }}
         <button>Login</button>
