@@ -1,6 +1,6 @@
 from django import forms
 from django.core.exceptions import ValidationError
-from blog_app.models import Blog
+from blog_app.models import Blog, Post
 
 
 class BlogForm(forms.Form):
@@ -22,3 +22,18 @@ class BlogForm(forms.Form):
 
     def save(self):
         blog = Blog.objects.create(**self.cleaned_data, author=self.author)
+
+
+class PostForm(forms.Form):
+    title = forms.CharField(max_length=80)
+    content = forms.CharField(widget=forms.Textarea)
+
+    title.widget.attrs.update({'class': 'form-control'})
+    content.widget.attrs.update({'class': 'form-control'})
+
+    def __init__(self, blog, *args, **kwargs):
+        self.blog = blog
+        super().__init__(*args, **kwargs)
+
+    def save(self):
+        blog = Post.objects.create(**self.cleaned_data, blog=self.blog)
