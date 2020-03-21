@@ -2,7 +2,7 @@
 
 {% block content %}
     <h3 class='mb-5'>{{ blog }}</h1>
-    <form action="{% url 'post_url' %}">
+    <form action="{% url 'posts_url' %}">
         <button class="btn btn-primary" type="submit">New Post</button>
     </form>
     {% for post in posts %}

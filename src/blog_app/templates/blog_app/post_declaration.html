@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <form action="{% url 'post_url' %}" method="POST">
+    <form action="{% url 'posts_url' %}" method="POST">
         {% csrf_token %}
         {% for field in form %}
             <div class="form-group">
