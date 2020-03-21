@@ -39,7 +39,7 @@ class UserBlogView(LoginRequiredMixin, View):
             bound_form = BlogForm(request.user, request.POST)
             if bound_form.is_valid():
                 bound_form.save()
-                return redirect('blog_url')
+                return redirect('my_blog_url')
             return render(request, 'blog_app/blog_declaration.html', context={'form': bound_form})
         return render(request, 'blog_app/blog_exists.html')
 
