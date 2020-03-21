@@ -81,7 +81,7 @@ DATABASES = {
         'NAME': 'blog_db',
         'USER': 'postgres',
         'PASSWORD': 'password',
-        'HOST': '127.0.0.1',
+        'HOST': 'db',
         'PORT': '5432',
     }
 }
@@ -135,6 +135,6 @@ EMAIL_USE_TLS = email_config.EMAIL_USE_TLS
 EMAIL_USE_SSL = email_config.EMAIL_USE_SSL
 
 CELERY_BROKER_TRANSPORT = 'redis'
-CELERY_BROKER_HOST = 'localhost'
+CELERY_BROKER_HOST = 'redis'
 CELERY_BROKER_PORT = '6379'
 CELERY_BROKER_VHOST = '0'
