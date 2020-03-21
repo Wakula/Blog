@@ -12,5 +12,5 @@ def email_task(title, blog_name, post_id, email):
         None,
         settings.EMAIL_HOST_USER,
         [email],
-        html_message=f'<a href="http://localhost:8000/post/{post_id}/">{email}</a>'
+        html_message=f'<a href="http://localhost:8000/post/{post_id}/">{title}</a>'
     )
