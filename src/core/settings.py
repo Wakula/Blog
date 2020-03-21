@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
-from core import email_config
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -126,13 +125,13 @@ USE_TZ = True
 STATIC_URL = '/static/'
 LOGIN_REDIRECT_URL = 'home_url'
 
-EMAIL_BACKEND = email_config.EMAIL_BACKEND
-EMAIL_HOST = email_config.EMAIL_HOST
-EMAIL_PORT = email_config.EMAIL_PORT
-EMAIL_HOST_USER = email_config.EMAIL_HOST_USER
-EMAIL_HOST_PASSWORD = email_config.EMAIL_HOST_PASSWORD
-EMAIL_USE_TLS = email_config.EMAIL_USE_TLS
-EMAIL_USE_SSL = email_config.EMAIL_USE_SSL
+EMAIL_BACKEND = ''
+EMAIL_HOST = ''
+EMAIL_PORT = ''
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''
+EMAIL_USE_TLS = ''
+EMAIL_USE_SSL = ''
 
 CELERY_BROKER_TRANSPORT = 'redis'
 CELERY_BROKER_HOST = 'redis'
