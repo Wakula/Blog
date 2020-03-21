@@ -24,7 +24,7 @@ services:
         depends_on:
             - db
     celery:
-        build: src/
+        build: .
         command: bash -c "cd src && celery -A core worker -l info"
         volumes:
             - .:/code
