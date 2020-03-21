@@ -21,7 +21,7 @@ class BlogForm(forms.Form):
         return name
 
     def save(self):
-        blog = Blog.objects.create(**self.cleaned_data, author=self.author)
+        Blog.objects.create(**self.cleaned_data, author=self.author)
 
 
 class PostForm(forms.Form):
@@ -36,4 +36,4 @@ class PostForm(forms.Form):
         super().__init__(*args, **kwargs)
 
     def save(self):
-        blog = Post.objects.create(**self.cleaned_data, blog=self.blog)
+        Post.objects.create(**self.cleaned_data, blog=self.blog)
