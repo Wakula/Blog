@@ -3,7 +3,7 @@
 ## Usage
 
 ### Email settings
-Edit src/core/settings.py for email notifications
+Edit this lines in src/core/settings.py for email notifications
 
 ```python
 EMAIL_BACKEND = ''
