@@ -3,7 +3,7 @@
 ## Usage
 
 ### Email settings
-Edit this lines in src/core/settings.py for email notifications
+Edit these lines in src/core/settings.py for email notifications
 
 ```python
 EMAIL_HOST = ''
@@ -17,7 +17,9 @@ EMAIL_USE_SSL = False
 Run in Blog/
 > docker-compose up
 Stop service after everything is running
-> Ctr+C
+
+> 'Ctr'+ C
+
 Create superuser
 > docker-compose run web python src/manage.py createsuperuser
 
