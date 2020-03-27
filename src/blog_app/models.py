@@ -4,33 +4,33 @@ from django.contrib.auth.models import User
 from blog_app.tasks import email_task
 
 
-class BlogUser(User):
-    class Meta:
-        proxy = True
+# class BlogUser(User):
+#     class Meta:
+#         proxy = True
 
-    def get_news_line(self):
-        subscribed_blogs = self.subscribed_blogs.all()
-        posts = []
-        for blog in subscribed_blogs:
-            posts += list(blog.post_set.all())
-        posts.sort(key=lambda blog: blog.date_pub, reverse=True)
-        for post in posts:
-            post.is_read = post in self.read_posts.all()
-        return posts
-
-
-class BlogManager(models.Manager):
-    def get_other_users_blogs(self, user):
-        blogs = self.exclude(author=user)
-        for blog in blogs:
-            blog.is_subscribed = blog in user.subscribed_blogs.all()
-        return blogs
+#     def get_news_line(self):
+#         subscribed_blogs = self.subscribed_blogs.all()
+#         posts = []
+#         for blog in subscribed_blogs:
+#             posts += list(blog.post_set.all())
+#         posts.sort(key=lambda blog: blog.date_pub, reverse=True)
+#         for post in posts:
+#             post.is_read = post in self.read_posts.all()
+#         return posts
 
 
-class Blog(models.Model):
+# class BlogManager(models.Manager):
+#     def get_other_users_blogs(self, user):
+#         blogs = self.exclude(author=user)
+#         for blog in blogs:
+#             blog.is_subscribed = blog in user.subscribed_blogs.all()
+#         return blogs
+
+
+class Profile(models.Model):
+    author = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     name = models.CharField(max_length=80, unique=True)
     description = models.TextField()
-    author = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     subscribers = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='subscribed_blogs')
     objects = BlogManager()
 
